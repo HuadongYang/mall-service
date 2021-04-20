@@ -25,14 +25,14 @@ public class BsDbClient {
 //        if (lastWriteFuture != null) {
 //            lastWriteFuture.sync();
 //        }
-        long time = System.currentTimeMillis() + 3000;
+        long time = System.currentTimeMillis() + 300;
         while (true) {
             if (ClientHandler.queue.size() <= size) {
                 continue;
             }
             size ++;
             String msg = ClientHandler.queue.get(size-1);
-            String[] msgArr = msg.split("\\s");
+            String[] msgArr = msg.split("%%");
             if (msgArr[0].equals(key)) {
                 ClientHandler.queue.remove(size-1);
                 if (msgArr[1].equals("null")) {

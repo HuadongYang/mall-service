@@ -6,10 +6,7 @@ import com.bishe.db.domain.MemoryDb;
 
 import java.util.*;
 
-/**
- * TODO 是否需要持久化
- * TODO IO多路复用
- */
+
 
 public class MemoryService {
 
@@ -28,9 +25,7 @@ public class MemoryService {
     private static Set<MemoryDb> hotData = new HashSet<>();
     private static final int hotDataSize = 5;
 
-    //TODO 异步
-    //TODO 检测内存状况
-    //TODO LRU https://my.oschina.net/zjllovecode/blog/1634410
+
     public void save(String key, MemoryDb memoryDb) {
         dataMap.put(key, memoryDb);
     }

@@ -3,7 +3,7 @@ package com.mal.service.domain;
 
 import com.mal.service.enums.ShoeEnum;
 
-public class Shoe {
+public class Mall {
     private Integer id;
     private String name;
     private String brand;
@@ -12,6 +12,15 @@ public class Shoe {
     private String color;
     private String url;
     private String description;
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public Integer getId() {
         return id;

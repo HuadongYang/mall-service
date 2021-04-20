@@ -19,7 +19,7 @@ public class ClientInitializer extends ChannelInitializer<SocketChannel> {
     @Override
     public void initChannel(SocketChannel ch) {
         ChannelPipeline pipeline = ch.pipeline();
-        pipeline.addLast(new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
+        pipeline.addLast(new DelimiterBasedFrameDecoder(8192000, Delimiters.lineDelimiter()));
         pipeline.addLast(DECODER);
         pipeline.addLast(ENCODER);
 

@@ -1,10 +1,28 @@
 package com.mal.service.domain;
 
-public class ShoeDetail {
+public class MallDetail {
     private Integer id;
-    private Integer shoeId;
+    private Integer mallId;
     private String urls;
     private String description;
+    private String type;
+
+
+    public Integer getMallId() {
+        return mallId;
+    }
+
+    public void setMallId(Integer mallId) {
+        this.mallId = mallId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public Integer getId() {
         return id;

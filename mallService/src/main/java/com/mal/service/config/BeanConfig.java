@@ -7,10 +7,15 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import org.apache.mahout.cf.taste.impl.model.jdbc.MySQLJDBCDataModel;
+import org.apache.mahout.cf.taste.model.DataModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+
+import javax.sql.DataSource;
 
 @Configuration
 public class BeanConfig {
@@ -20,6 +25,8 @@ public class BeanConfig {
 
     @Value("${bs.db.port}")
     private int bsDbPort;
+    @Autowired
+    private DataSource dataSource;
 
 
     @Bean
@@ -35,5 +42,10 @@ public class BeanConfig {
         } finally {
 
         }
+    }
+    @Bean
+    public DataModel getDataModel(){
+        DataModel dataModel = new MySQLJDBCDataModel(dataSource, "user_mall_detail", "userId", "mallId", "preferenceValue", "timestamp");
+        return dataModel;
     }
 }

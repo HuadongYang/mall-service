@@ -10,6 +10,6 @@ mvnw.cmd
 *.iml
 out
 gen
-
-
+*.class
+target/
 

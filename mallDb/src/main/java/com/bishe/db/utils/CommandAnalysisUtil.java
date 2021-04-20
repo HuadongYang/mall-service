@@ -8,7 +8,7 @@ import java.util.Date;
 
 
 public class CommandAnalysisUtil {
-    private static final String split = "\\s";
+    private static final String split = "%%";
 
     public Command analysis(String request) {
         if (!checkRequest(request)) {

@@ -19,7 +19,7 @@ public class CommandDispatcher {
         if (command.getCommand().equals(CommandEnum.GET)) {
             String value = memoryService.get(command.getKey());
 
-            return command.getKey() + " " + memoryService.get(command.getKey());
+            return command.getKey() + "%%" + memoryService.get(command.getKey());
         } else {
             memoryService.save(command.getKey(), new MemoryDb(command.getKey(), command.getValue(), command.getExpireTime()));
         }
