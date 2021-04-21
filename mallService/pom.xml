@@ -20,6 +20,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.2.1.RELEASE</version>
+        <relativePath></relativePath>
     </parent>
 
 
@@ -116,6 +117,9 @@
                 <directory>src/main/resources</directory>
                 <includes>
                     <include>**/*.yml</include>
+                    <include>**/*.png</include>
+                    <include>**/*.jpg</include>
+                    <include>**/*.json</include>
                     <include>**/*.properties</include>
                     <include>**/*.html</include>
                     <include>**/*.js</include>

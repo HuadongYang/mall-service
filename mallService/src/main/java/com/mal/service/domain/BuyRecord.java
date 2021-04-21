@@ -1,35 +1,26 @@
 package com.mal.service.domain;
 
-
-import com.mal.service.enums.ShoeEnum;
-
+import java.math.BigInteger;
 import java.util.Date;
 
-public class Mall {
+public class BuyRecord {
     private Integer id;
+    private Integer mallId;
+    private Integer userId;
+    private Date time;
+
     private String name;
     private String brand;
-    private Integer size;
     private Integer price;
-    private String color;
     private String url;
     private String description;
-    private String type;
 
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getBrand() {
@@ -38,30 +29,6 @@ public class Mall {
 
     public void setBrand(String brand) {
         this.brand = brand;
-    }
-
-    public Integer getSize() {
-        return size;
-    }
-
-    public void setSize(Integer size) {
-        this.size = size;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Integer getPrice() {
@@ -86,5 +53,37 @@ public class Mall {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getMallId() {
+        return mallId;
+    }
+
+    public void setMallId(Integer mallId) {
+        this.mallId = mallId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
     }
 }

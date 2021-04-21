@@ -58,7 +58,7 @@ public class MallService {
             if (msg != null){
                 System.out.println("from redis");
                 MallDetail mallDetail =objectMapper.readValue(msg, MallDetail.class);
-                setUserMallDetail(userId, mallDetail.getId(), mallDetail.getMallId());
+                setUserMallDetail(userId, mallDetail.getMallId());
                 return mallDetail;
             }
         } catch (InterruptedException e) {
@@ -68,12 +68,12 @@ public class MallService {
         MallDetail mallDetail = mallDao.getMallDetail(mallId);
         String value = objectMapper.writeValueAsString(mallDetail);
         bsDbClient.send("set%%" + mallId + "%%" + value);
-        setUserMallDetail(userId, mallDetail.getId(), mallDetail.getMallId());
+        setUserMallDetail(userId, mallDetail.getMallId());
         return mallDetail;
     }
 
-    private void setUserMallDetail(Integer userId, Integer mallDetailId, Integer mallId){
-        UserMallDetail userMallDetail = mallDao.getUserMallDetail(userId, mallDetailId);
+    public void setUserMallDetail(Integer userId, Integer mallId){
+        UserMallDetail userMallDetail = mallDao.getUserMallDetail(userId, mallId);
         if (userMallDetail == null) {
             mallDao.insertUserMallDetail(userId, mallId, 1);
             return;

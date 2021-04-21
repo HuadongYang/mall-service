@@ -28,6 +28,7 @@ public class MallDao {
         return malls;
     }
 
+
     public MallDetail getMallDetail(Integer mallId) {
         List<MallDetail> shoes = jdbcTemplate.query("select * from mall_detail where mallId = " + mallId, new BeanPropertyRowMapper<>(MallDetail.class));
         if (CollectionUtils.isEmpty(shoes)) {
