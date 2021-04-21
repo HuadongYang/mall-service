@@ -11,7 +11,6 @@ import java.util.*;
 public class MemoryService {
 
     private static final int cacheSize = 1000;
-    private static HashMap<String, MemoryDb> dataMap1 = new HashMap<>();
     private static LinkedHashMap<String, MemoryDb> dataMap = new LinkedHashMap<String, MemoryDb>(5,0.75F ,true){
         @Override
         protected boolean removeEldestEntry(Map.Entry<String, MemoryDb> var){
