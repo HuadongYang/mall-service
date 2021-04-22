@@ -4,7 +4,6 @@ public class MallDetail {
     private Integer id;
     private Integer mallId;
     private String urls;
-    private String description;
     private String type;
 
 
@@ -40,11 +39,4 @@ public class MallDetail {
         this.urls = urls;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

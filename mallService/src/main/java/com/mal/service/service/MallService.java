@@ -1,5 +1,8 @@
 package com.mal.service.service;
 
+import com.alibaba.fastjson.JSONObject;
+import com.bs.bean.beans.DataType;
+import com.bs.bean.beans.KVObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,9 +11,11 @@ import com.mal.service.dao.MallDao;
 import com.mal.service.domain.Mall;
 import com.mal.service.domain.MallDetail;
 import com.mal.service.domain.UserMallDetail;
+import io.netty.util.internal.ObjectUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,56 +28,35 @@ public class MallService {
     @Autowired
     private BsDbClient bsDbClient;
 
-    public List<Mall> getMallsByIds(List<Integer> ids){
+    public List<Mall> getMallsByIds(List<Integer> ids) {
         return mallDao.getMallsByIds(ids);
     }
 
     public List<Mall> getMalls(String type) throws InterruptedException, JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            String msg = bsDbClient.get("get%%" + type, type);
-            System.out.println("from redis msg : " + msg);
-            if (msg != null){
-                return objectMapper.readValue(msg, new ArrayList<Mall>().getClass());
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
         System.out.println("from db");
-        List<Mall> malls = mallDao.getMalls(type);
-        String value = objectMapper.writeValueAsString(malls);
-        bsDbClient.send("set%%" + type + "%%" + value);
         return mallDao.getMalls(type);
     }
 
     @SneakyThrows
     public MallDetail getMallDetail(Integer userId, Integer mallId) {
         ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            String msg = bsDbClient.get("get%%" + mallId, String.valueOf(mallId));
-            System.out.println(msg);
-            if (msg != null){
-                System.out.println("from redis");
-                MallDetail mallDetail =objectMapper.readValue(msg, MallDetail.class);
-                setUserMallDetail(userId, mallDetail.getMallId());
-                return mallDetail;
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        MallDetail mallDetail = bsDbClient.get(String.valueOf(mallId), MallDetail.class);
+        if (mallDetail != null) {
+            System.out.println("from redis");
+            System.out.println(JSONObject.toJSONString(mallDetail));
+            setUserMallDetail(userId, mallDetail.getMallId());
+            return mallDetail;
         }
+
         System.out.println("from db");
-        MallDetail mallDetail = mallDao.getMallDetail(mallId);
+        mallDetail = mallDao.getMallDetail(mallId);
         String value = objectMapper.writeValueAsString(mallDetail);
-        bsDbClient.send("set%%" + mallId + "%%" + value);
+        bsDbClient.set(String.valueOf(mallId), new KVObject(DataType.STRING_TYPE, value));
         setUserMallDetail(userId, mallDetail.getMallId());
         return mallDetail;
     }
 
-    public void setUserMallDetail(Integer userId, Integer mallId){
+    public void setUserMallDetail(Integer userId, Integer mallId) {
         UserMallDetail userMallDetail = mallDao.getUserMallDetail(userId, mallId);
         if (userMallDetail == null) {
             mallDao.insertUserMallDetail(userId, mallId, 1);
@@ -81,7 +65,7 @@ public class MallService {
         mallDao.updateUserMallDetail(userMallDetail.getId(), userMallDetail.getPreferenceValue() + 1);
     }
 
-    public List<UserMallDetail> getUserMallDetailByUserIds(Integer userId, Long[] otherIds){
+    public List<UserMallDetail> getUserMallDetailByUserIds(Integer userId, Long[] otherIds) {
         return mallDao.getUserMallDetailByUserIds(userId, otherIds);
     }
 

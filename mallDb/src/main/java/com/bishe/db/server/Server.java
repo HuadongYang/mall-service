@@ -10,20 +10,20 @@ import io.netty.handler.logging.LoggingHandler;
 
 
 public final class Server {
-    public  static void main(String[] args) throws Exception {
-        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
-        try {
-            ServerBootstrap b = new ServerBootstrap();
-            b.group(bossGroup,workerGroup)
-                    .channel(NioServerSocketChannel.class)
-                    .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new ServerInitializer());
-            ChannelFuture f = b.bind(8888);
-            f.channel().closeFuture().sync();
-        } finally {
-            bossGroup.shutdownGracefully();
-            workerGroup.shutdownGracefully();
-        }
-    }
+//    public  static void main(String[] args) throws Exception {
+//        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+//        EventLoopGroup workerGroup = new NioEventLoopGroup();
+//        try {
+//            ServerBootstrap b = new ServerBootstrap();
+//            b.group(bossGroup,workerGroup)
+//                    .channel(NioServerSocketChannel.class)
+//                    .handler(new LoggingHandler(LogLevel.INFO))
+//                    .childHandler(new ServerInitializer());
+//            ChannelFuture f = b.bind(8888);
+//            f.channel().closeFuture().sync();
+//        } finally {
+//            bossGroup.shutdownGracefully();
+//            workerGroup.shutdownGracefully();
+//        }
+//    }
 }

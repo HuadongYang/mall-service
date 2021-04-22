@@ -1,36 +1,40 @@
 package com.bishe.db.server;
 
-import com.bishe.db.service.CommandDispatcher;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
+import com.alibaba.fastjson.JSON;
+import com.bishe.db.bean.DbRequest;
+import com.bishe.db.db.KVDataBase;
+import com.bs.bean.beans.RemoteRequest;
+import com.bs.bean.beans.RemoteResponse;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-
-import java.net.InetAddress;
-import java.util.Date;
 
 
 @Sharable
 public class ServerHandler extends SimpleChannelInboundHandler<String> {
 
-    private static CommandDispatcher commandDispatcher = new CommandDispatcher();
+
+    private KVDataBase db;
+
+    public ServerHandler(KVDataBase db) {
+        this.db = db;
+    }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        // 为新连接发送庆祝
-        ctx.write("Welcome to " + InetAddress.getLocalHost().getHostName() + "!\r\n");
-        ctx.write("It is " + new Date() + " now.\r\n");
         ctx.flush();
     }
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, String request) throws Exception {
-        System.out.println(request);
-        String response = commandDispatcher.dispatcher(request);
-        if (response != null) {
-            System.out.println("send>>" + response);
-            ctx.write(response + "\r\n");
+    public void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
+
+
+        System.out.println("receive message: " + msg);
+        RemoteRequest req = (RemoteRequest) JSON.parseObject(msg, RemoteRequest.class);
+        RemoteResponse remoteResponse = db.getHandler().process(new DbRequest(req.getC(), req.getK(), req.getV(), req.getCi()));
+        if (remoteResponse != null) {
+            System.out.println("send message: " + JSON.toJSONString(remoteResponse));
+            ctx.write(JSON.toJSONString(remoteResponse) + "\r\n");
         }
     }
 

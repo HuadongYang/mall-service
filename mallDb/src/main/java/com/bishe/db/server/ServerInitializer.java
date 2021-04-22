@@ -1,5 +1,6 @@
 package com.bishe.db.server;
 
+import com.bishe.db.db.KVDataBase;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -12,8 +13,11 @@ public class ServerInitializer extends ChannelInitializer<SocketChannel> {
     private static final StringDecoder DECODER = new StringDecoder();
     private static final StringEncoder ENCODER = new StringEncoder();
 
-    private static final ServerHandler SERVER_HANDLER = new ServerHandler();
+    private static ServerHandler SERVER_HANDLER;
 
+    public ServerInitializer(KVDataBase db) {
+        SERVER_HANDLER = new ServerHandler(db);
+    }
 
     @Override
     public void initChannel(SocketChannel ch) throws Exception {
