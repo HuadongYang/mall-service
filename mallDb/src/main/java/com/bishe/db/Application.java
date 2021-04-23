@@ -1,8 +1,6 @@
 package com.bishe.db;
 
 import com.bishe.db.db.StandAloneDB;
-import com.bishe.db.queue.RequestLinkedQueue;
-import com.bishe.db.queue.ResponseMapQueue;
 
 public class Application {
 
@@ -11,12 +9,10 @@ public class Application {
     }
 
     public static void spinTest() {
-        StandAloneDB db = new StandAloneDB(16, new RequestLinkedQueue(),
-                new ResponseMapQueue());
+        StandAloneDB db = new StandAloneDB(1000, 500);
         try {
             db.start();
         } catch (InterruptedException e) {
-            db.stop();
             e.printStackTrace();
         }
     }

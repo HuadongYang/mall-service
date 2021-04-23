@@ -3,44 +3,44 @@ package com.bs.bean.beans;
 
 public class DataTable<K, V> {
 
-	private KVMap<K, V>[] dt;
+	private KVList<K, V>[] dt;
 
 	private int rehashIndex;
 
 	private boolean isRehash;
 
 	@SuppressWarnings("unchecked")
-	public DataTable() {
+	public DataTable(int lruCapacity, int mapCapacity) {
 		this.isRehash = false;
 		this.rehashIndex = -1;
 
-		dt = new KVMap[2];
-		dt[0] = new KVMap<>();
+		dt = new KVList[2];
+		dt[0] = new KVList<>(lruCapacity, mapCapacity);
 	}
 
 	public int size() {
 		return dt[0].capacity();
 	}
 
-	public V get(Object key) {
+	public V get(K key) {
 		V e;
 		if (isRehash) {
-			if ((e = dt[1].get(key)) == null) {
-				e = dt[0].get(key);
+			if ((e = dt[1].getV(key)) == null) {
+				e = dt[0].getV(key);
 			}
 			rehash();
 		} else {
-			e = dt[0].get(key);
+			e = dt[0].getV(key);
 		}
 		return e == null ? null : e;
 	}
 
-	public KVMap.Node<K, V> getIndex(int index) {
-		KVMap.Node<K, V> e = dt[0].getIndex(index);
+	public KVMap.Node<K, DataNode<K, V> > getIndex(int index) {
+		KVMap.Node<K, DataNode<K, V>> e = dt[0].getIndex(index);
 		return e;
 	}
 
-	public V put(K key, V value, long cid) {
+	public void put(K key, V value, long cid) {
 		if (!isRehash) {
 			if (dt[0].isReSize()) {
 				isRehash = true;
@@ -49,14 +49,12 @@ public class DataTable<K, V> {
 			}
 		}
 
-		V v;
 		if (isRehash) {
-			v = dt[1].put(key, value, cid);
+			dt[1].putKV(key, value, cid);
 			rehash();
 		} else {
-			v = dt[0].put(key, value, cid);
+			dt[0].putKV(key, value, cid);
 		}
-		return v;
 	}
 
 	private void resize() {
@@ -65,12 +63,12 @@ public class DataTable<K, V> {
 			throw new ArrayIndexOutOfBoundsException();
 		}
 		capacity = capacity > Integer.MAX_VALUE ? Integer.MAX_VALUE : capacity;
-		dt[1] = new KVMap<>(capacity);
+		dt[1] = new KVList<>(capacity);
 	}
 
 	private void rehash() {
 		if (rehashIndex < dt[0].capacity()) {
-			KVMap.Node<K, V> e = dt[0].getIndex(rehashIndex);
+			KVMap.Node<K, DataNode<K, V> > e = dt[0].getIndex(rehashIndex);
 			if (e != null) {
 				dt[1].putNode(e);
 			}
@@ -84,8 +82,8 @@ public class DataTable<K, V> {
 		}
 	}
 
-	public V remove(Object key) {
-		V e;
+	public DataNode<K, V>  remove(K key) {
+		DataNode<K, V>  e;
 		if (isRehash) {
 			dt[0].remove(key);
 			e = dt[1].remove(key);

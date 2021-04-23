@@ -151,7 +151,7 @@ public class KVMap<K, V> {
         return new Node<>(hash, key, value, next, cid);
     }
 	
-	public V remove(Object key) {
+	public V remove(K key) {
 		Node<K,V> e = removeNode(hash(key), key);
         return e == null ? null : e.value;
 	}

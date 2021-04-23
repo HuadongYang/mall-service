@@ -27,8 +27,6 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
-
-
         System.out.println("receive message: " + msg);
         RemoteRequest req = (RemoteRequest) JSON.parseObject(msg, RemoteRequest.class);
         RemoteResponse remoteResponse = db.getHandler().process(new DbRequest(req.getC(), req.getK(), req.getV(), req.getCi()));
